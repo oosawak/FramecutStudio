@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1220">
-<title>FrameCut Studio v1.4.2 — Prompt to Video to Sprites</title>
+<title>FrameCut Studio v1.5.0 — Prompt to Video to Sprites</title>
 <style>
 :root{color-scheme:dark;--bg:#080d17;--panel:#121b2b;--panel2:#172236;--line:#293850;--text:#edf4ff;--muted:#91a3bf;--accent:#4ce0b3;--violet:#9b91ff;--orange:#ffba72;--radius:15px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Noto Sans JP",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse 75% 90% at 70% -15%,#1e2b4b 0%,transparent 60%),var(--bg);color:var(--text);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -46,7 +46,7 @@ header{height:76px;border-bottom:1px solid var(--line);display:flex;justify-cont
 @media(max-width:1200px){.prompt-panel .prompt-body{grid-template-columns:minmax(260px,1fr) minmax(300px,1.3fr);gap:17px}.prompt-browser{grid-column:1/-1;border-left:0;border-top:1px solid #34465b;padding:15px 0 0}}
 @media(max-width:750px){.prompt-wide-shell{padding:10px 10px 0}.prompt-panel{padding:15px}.prompt-panel .prompt-body{display:flex;flex-direction:column;gap:20px}.prompt-settings,.prompt-output-area,.prompt-browser{width:100%}.prompt-output-area,.prompt-browser{border-top:1px solid #34465b;border-left:0;padding:16px 0 0}.browser-viewport,.browser-viewport iframe,.browser-placeholder{min-height:340px;height:340px}.prompt-panel .prompt-builder summary.title{font-size:12px}}
 
-/* v1.4.2 – default 4x4 grid and WASM chroma-key */
+/* v1.5.0 – default 4x4 grid and WASM chroma-key */
 .brand-title{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .version-label{font-size:10px;font-weight:750;letter-spacing:.05em;border:1px solid #48637f;border-radius:6px;color:#bfdbfa;background:#1c3047;padding:3px 6px;white-space:nowrap;line-height:1.25}
 .sample-picker{display:flex;flex-direction:column;gap:8px;background:#0e1b2d;border:1px solid #30455e;border-radius:11px;padding:12px}
@@ -58,7 +58,7 @@ header{height:76px;border-bottom:1px solid var(--line);display:flex;justify-cont
 #samplePath{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#8ac5da}
 @media(max-width:750px){.brand-title{gap:7px}.version-label{font-size:9px}}
 
-/* v1.4.2: magnification is preview-only, never affects sprite exports. */
+/* v1.5.0: magnification is preview-only, never affects sprite exports. */
 .preview-head-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .preview-zoom{display:flex;align-items:center;gap:3px;background:#0b1829;border:1px solid #344a60;padding:3px;border-radius:9px}
 .preview-zoom span{font-size:10px;color:#aabbd1;padding:0 5px;white-space:nowrap}
@@ -73,11 +73,26 @@ header{height:76px;border-bottom:1px solid var(--line);display:flex;justify-cont
 .zoom-viewport canvas.hidden{display:none!important}
 .zoom-caption{font-size:10px;color:#90a6bb}
 @media(max-width:750px){.viewport.zoom-viewport{height:min(44vh,300px);min-height:175px}.preview-checker.zoom-viewport{height:220px}.preview-head-controls{justify-content:flex-start}.preview-zoom span{padding:0 3px}.preview-zoom button{padding:5px 7px}}
+
+/* v1.5: fixed-height scroll windows, even for 4x+ magnification. */
+.viewport.zoom-viewport{height:min(48dvh,430px)!important;max-height:min(48dvh,430px)!important;min-height:160px;overflow:auto!important}
+.preview-checker.zoom-viewport{height:min(36dvh,300px)!important;max-height:min(36dvh,300px)!important;min-height:145px;overflow:auto!important}
+.zoom-stage{margin:0 auto}
+.crop-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.crop-fields .input{padding:8px 4px;text-align:center;font-variant-numeric:tabular-nums}
+.crop-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.crop-nudge{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.crop-nudge button{padding:7px 4px}
+.cell-crop-panel{border:1px solid #3a5364;border-radius:10px;padding:11px;background:#0b1928;display:flex;flex-direction:column;gap:10px}
+.cell-crop-panel .title{color:#9ce9d5}
+.cell-crop-panel .switchline{line-height:1.5}
+.crop-note{font-size:10px;color:#90a9c7;line-height:1.65}
+@media(max-width:750px){.viewport.zoom-viewport{height:min(39dvh,310px)!important;max-height:min(39dvh,310px)!important;min-height:155px}.preview-checker.zoom-viewport{height:min(32dvh,250px)!important;max-height:min(32dvh,250px)!important;min-height:140px}.crop-fields{gap:5px}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><div class="logomark">▦</div><div><div class="brand-title"><b>FRAMECUT <span class="accent">STUDIO</span></b><span class="version-label" title="アプリのバージョン">v1.4.2</span></div><small>VIDEO → SPRITES · SINGLE HTML</small></div></div>
+ <div class="brand"><div class="logomark">▦</div><div><div class="brand-title"><b>FRAMECUT <span class="accent">STUDIO</span></b><span class="version-label" title="アプリのバージョン">v1.5.0</span></div><small>VIDEO → SPRITES · SINGLE HTML</small></div></div>
  <div class="head-right"><span class="tag" id="engineBadge">● WASM 初期化中</span><span class="tag">🔒 LOCAL PROCESSING</span></div>
 </header>
 <div class="prompt-wide-shell"><div class="panel prompt-panel">
@@ -175,16 +190,27 @@ header{height:76px;border-bottom:1px solid var(--line);display:flex;justify-cont
   <section class="group"><div class="title">04 / 背景透過 <span>WASM</span></div><label class="switchline"><input type="checkbox" id="keyEnable" checked>背景色を透過する</label><div class="field"><label for="keyMode">透過方式</label><select id="keyMode" class="input"><option value="smart">スマート保護（WASM＋境界解析）</option><option value="wasm" selected>WASM 色差優先（内側も透過）</option></select></div><label class="switchline"><input type="checkbox" id="perCellBg" checked>セルごとに背景色を自動補正</label><p class="hint" style="margin:0" id="keyHint">スマート保護は背景につながる部分だけを除去し、キャラ内部の似た色を保護します。内部の背景が残る場合は「色差優先」に切り替えてください。色を手動指定するとセル別補正はOFFになります。</p><div class="row"><div class="field"><label>背景色 / スポイト</label><div class="row"><input id="bgColor" type="color" class="colorfield" value="#27c66b"><button class="btn small" id="eyedropper" disabled>⌖ 映像から選ぶ</button></div></div><button class="btn small ghost" id="detectBg" disabled>自動判定</button></div><div class="field"><div class="row"><label for="tolerance">許容色差</label><span id="tolVal" class="tiny">52</span></div><input class="range" id="tolerance" type="range" min="0" max="180" value="52"></div><div class="field"><div class="row"><label for="softness">エッジの柔らかさ</label><span id="softVal" class="tiny">26</span></div><input class="range" id="softness" type="range" min="1" max="120" value="26"></div><div class="field"><div class="row"><label for="spill">グリーンかぶり軽減</label><span id="spillVal" class="tiny">70%</span></div><input class="range" id="spill" type="range" min="0" max="100" value="70"></div><label class="switchline"><input type="checkbox" id="denoise">孤立した小さな点を除去</label><button class="btn ghost full" id="aiBtn" disabled>✦ 選択セルをAI輪郭解析（任意）</button><p class="hint" style="margin:0">通常処理は同梱のWASMでオフライン実行。AI輪郭解析は外部のモデルとライブラリを初回取得します（大容量・要ネット接続）。通常のスマート保護はHTML内のWASMとJavaScriptで動き、画像はサーバーに送信しません。</p></section>
  </aside>
  <div class="central">
-  <section class="panel"><div class="panel-heading"><b>◈ SOURCE PREVIEW <span>グリッド境界・クリックでキャラクター選択</span></b><div class="preview-head-controls"><span id="sourceSub">NO INPUT</span><div class="preview-zoom" role="group" aria-label="ソースプレビューの表示倍率"><span>表示</span><button type="button" class="active" data-preview-zoom="source" data-zoom="1" aria-pressed="true">1×</button><button type="button" data-preview-zoom="source" data-zoom="2" aria-pressed="false">2×</button><button type="button" data-preview-zoom="source" data-zoom="3" aria-pressed="false">3×</button></div></div></div><div class="canvas-wrap"><div class="viewport zoom-viewport" id="sourceViewport"><div class="zoom-stage" id="sourceStage"><div id="emptySource" class="empty"><div style="font-size:31px;color:#54cbae">▦</div><strong>動画 → スプライト生成</strong><small>グリッド動画をドロップ、または<br>サンプル01・02を読み込んで確認できます。</small></div><canvas id="sourceCanvas" class="hidden"></canvas></div></div><div class="toolbar"><button class="btn small" id="prevFrame" disabled>◀</button><button class="btn small" id="playBtn" disabled>▶ 再生</button><button class="btn small" id="nextFrame" disabled>▶</button><input type="range" id="frameSlider" min="0" max="0" value="0" disabled><span id="frameCount" class="frameinfo">0 frames</span></div></div></section>
+  <section class="panel"><div class="panel-heading"><b>◈ SOURCE PREVIEW <span>グリッド＋セル個別領域 / クリックで選択</span></b><div class="preview-head-controls"><span id="sourceSub">NO INPUT</span><div class="preview-zoom" role="group" aria-label="ソースプレビューの表示倍率"><span>表示</span><button type="button" class="active" data-preview-zoom="source" data-zoom="1" aria-pressed="true">1×</button><button type="button" data-preview-zoom="source" data-zoom="2" aria-pressed="false">2×</button><button type="button" data-preview-zoom="source" data-zoom="3" aria-pressed="false">3×</button><button type="button" data-preview-zoom="source" data-zoom="4" aria-pressed="false">4×</button></div></div></div><div class="canvas-wrap"><div class="viewport zoom-viewport" id="sourceViewport"><div class="zoom-stage" id="sourceStage"><div id="emptySource" class="empty"><div style="font-size:31px;color:#54cbae">▦</div><strong>動画 → スプライト生成</strong><small>グリッド動画をドロップ、または<br>サンプル01・02を読み込んで確認できます。</small></div><canvas id="sourceCanvas" class="hidden"></canvas></div></div><div class="toolbar"><button class="btn small" id="prevFrame" disabled>◀</button><button class="btn small" id="playBtn" disabled>▶ 再生</button><button class="btn small" id="nextFrame" disabled>▶</button><input type="range" id="frameSlider" min="0" max="0" value="0" disabled><span id="frameCount" class="frameinfo">0 frames</span></div></div></section>
   <section class="panel"><div class="panel-heading"><b>▦ CHARACTER GRID <span>対象キャラを選択 / チェックで書き出し対象</span></b><div class="toolbar"><button class="btn small ghost" id="allCells" disabled>全選択</button><button class="btn small ghost" id="noCells" disabled>全解除</button><span id="selectedCount" class="tiny">0 cells</span></div></div><div class="grid-cells" id="cells"><div class="empty" style="grid-column:1/-1;padding:20px"><small>抽出後にセル一覧が表示されます</small></div></div></section>
-  <section class="panel"><div class="panel-heading"><b>◫ 選択キャラの背景透過プレビュー</b><div class="preview-head-controls"><span id="cellSub">—</span><div class="preview-zoom" role="group" aria-label="キャラクタープレビューの表示倍率"><span>表示</span><button type="button" class="active" data-preview-zoom="sprite" data-zoom="1" aria-pressed="true">1×</button><button type="button" data-preview-zoom="sprite" data-zoom="2" aria-pressed="false">2×</button><button type="button" data-preview-zoom="sprite" data-zoom="3" aria-pressed="false">3×</button></div></div></div><div class="canvas-wrap"><div class="preview-checker zoom-viewport" id="spriteViewport"><div class="zoom-stage" id="spriteStage"><canvas id="spriteCanvas" width="128" height="128"></canvas></div></div><div class="hint" id="previewHint">透過部分は市松模様で表示します。動画再生・背景色・色差調整と同期します。<span class="zoom-caption">倍率を上げるとスクロールして細部を確認できます（出力サイズは変わりません）。</span></div></div></section>
+  <section class="panel"><div class="panel-heading"><b>◫ 選択キャラの背景透過プレビュー</b><div class="preview-head-controls"><span id="cellSub">—</span><div class="preview-zoom" role="group" aria-label="キャラクタープレビューの表示倍率"><span>表示</span><button type="button" class="active" data-preview-zoom="sprite" data-zoom="1" aria-pressed="true">1×</button><button type="button" data-preview-zoom="sprite" data-zoom="2" aria-pressed="false">2×</button><button type="button" data-preview-zoom="sprite" data-zoom="3" aria-pressed="false">3×</button><button type="button" data-preview-zoom="sprite" data-zoom="4" aria-pressed="false">4×</button></div></div></div><div class="canvas-wrap"><div class="preview-checker zoom-viewport" id="spriteViewport"><div class="zoom-stage" id="spriteStage"><canvas id="spriteCanvas" width="128" height="128"></canvas></div></div><div class="hint" id="previewHint">透過部分は市松模様で表示します。動画再生・背景色・色差調整と同期します。<span class="zoom-caption">2～4倍は表示枠の高さを保ったままスクロールして確認できます（出力サイズは変わりません）。</span></div></div></section>
  </div>
  <div class="right-side">
-  <section class="panel"><div class="panel-heading"><b>✎ CHARACTER SETTINGS</b><span id="cellLabel">未選択</span></div><div class="editor"><div class="field"><label for="charName">キャラクター名</label><input id="charName" class="input" placeholder="character_01" disabled></div><div class="row"><label class="switchline"><input type="checkbox" id="useCell" disabled>書き出し対象</label><button class="btn small ghost" id="copyActions" disabled>アクションを全セルにコピー</button></div><div class="title">ANIMATION / アクション区間</div><div class="timeline" id="timeline"></div><div id="segments"></div><button class="btn small ghost full" id="addSegment" disabled>＋ アクション区間を追加</button><p class="hint" style="margin:0">区間は秒指定です。例：0–1秒「idle」、1–2秒「attack」。区間ごとに個別のPNG・GIF・JSONを書き出します。</p></div></section>
+  <section class="panel"><div class="panel-heading"><b>✎ CHARACTER SETTINGS</b><span id="cellLabel">未選択</span></div><div class="editor"><div class="field"><label for="charName">キャラクター名</label><input id="charName" class="input" placeholder="character_01" disabled></div><div class="row"><label class="switchline"><input type="checkbox" id="useCell" disabled>書き出し対象</label><button class="btn small ghost" id="copyActions" disabled>アクションを全セルにコピー</button></div><div class="cell-crop-panel" id="cellCropPanel"><div class="title">◱ CELL切り出し範囲 <span>個別調整</span></div>
+<div class="crop-fields">
+ <div class="field"><label for="cropX">X 開始</label><input id="cropX" class="input" type="number" min="0" step="1" disabled></div>
+ <div class="field"><label for="cropY">Y 開始</label><input id="cropY" class="input" type="number" min="0" step="1" disabled></div>
+ <div class="field"><label for="cropW">横幅 W</label><input id="cropW" class="input" type="number" min="1" step="1" disabled></div>
+ <div class="field"><label for="cropH">高さ H</label><input id="cropH" class="input" type="number" min="1" step="1" disabled></div>
+</div>
+<div class="crop-nudge"><button class="btn small ghost" type="button" data-crop-nudge="x,-1" disabled>← 1px</button><button class="btn small ghost" type="button" data-crop-nudge="x,1" disabled>1px →</button><button class="btn small ghost" type="button" data-crop-nudge="y,-1" disabled>↑ 1px</button><button class="btn small ghost" type="button" data-crop-nudge="y,1" disabled>1px ↓</button></div>
+<label class="switchline"><input id="subtractNeighbor" type="checkbox" disabled>重なった隣のキャラを除外（試験機能）</label>
+<div class="crop-actions"><button id="cropReset" type="button" class="btn small ghost" disabled>↶ このCELLを初期化</button><button id="cropFit" type="button" class="btn small ghost" disabled>↔ 横幅を1.5倍</button></div>
+<div class="crop-note" id="cropHint">処理解像度のピクセル単位です。各CELLを独立して調整でき、隣の範囲にも重ねられます。隣キャラ除外は背景透過後に、元のセル中央につながらない領域を取り除きます。接触・重なった人物の完全分離はできません。</div>
+</div><div class="title">ANIMATION / アクション区間</div><div class="timeline" id="timeline"></div><div id="segments"></div><button class="btn small ghost full" id="addSegment" disabled>＋ アクション区間を追加</button><p class="hint" style="margin:0">区間は秒指定です。例：0–1秒「idle」、1–2秒「attack」。区間ごとに個別のPNG・GIF・JSONを書き出します。</p></div></section>
   <section class="panel"><div class="panel-heading"><b>↗ OUTPUT SETTINGS</b><span>PNG / JSON / GIF / ZIP</span></div><div class="editor"><div class="trip-fields"><div class="field"><label for="padding">余白 px</label><input type="number" class="input" id="padding" min="0" max="128" value="3"></div><div class="field"><label for="scale">拡大率</label><select id="scale" class="input"><option value="1">1×</option><option value="2">2×</option><option value="3">3×</option><option value="4">4×</option></select></div><div class="field"><label for="perRow">1行のコマ数</label><input type="number" class="input" id="perRow" min="1" max="32" value="8"></div></div><label class="switchline"><input type="checkbox" id="exportFrames">連番PNGもZIPへ含める</label><div class="exportactions"><button class="btn ghost" id="pngBtn" disabled>◫ PNG</button><button class="btn ghost" id="gifBtn" disabled>▶ GIF</button></div><button class="btn primary full" id="selectedZip" disabled>↓ 選択キャラ ZIP</button><button class="btn primary full" id="allZip" disabled>⇩ 全キャラ 一括 ZIP</button><div class="progresswrap"><div class="progressbar" id="progress"></div></div><div id="status" role="status" class="status">準備中…</div><div class="note">ZIPにはスプライトシートPNG、TexturePacker互換JSON、アニメーションGIF、manifest.jsonを格納。ゲームエンジンへの取り込みにも使えます。</div></div></section>
  </div>
 </main>
-<footer class="footer">FRAMECUT STUDIO / v1.4.2 — ブラウザ内で動画を処理します。WebAssemblyはHTML内に組み込み済みです。AI解析モードだけは外部ライブラリ・モデルが必要です。ブラウザで読み込めないコーデックの動画はMP4(H.264)やWebMへ変換してください。AI輪郭解析の任意ライブラリは<a style="color:#8adbd2" href="https://github.com/imgly/background-removal-js" target="_blank" rel="noopener">@imgly/background-removal (AGPL-3.0)</a>です。公開・改変時はライセンス条件を確認してください。</footer>
+<footer class="footer">FRAMECUT STUDIO / v1.5.0 — ブラウザ内で動画を処理します。WebAssemblyはHTML内に組み込み済みです。AI解析モードだけは外部ライブラリ・モデルが必要です。ブラウザで読み込めないコーデックの動画はMP4(H.264)やWebMへ変換してください。AI輪郭解析の任意ライブラリは<a style="color:#8adbd2" href="https://github.com/imgly/background-removal-js" target="_blank" rel="noopener">@imgly/background-removal (AGPL-3.0)</a>です。公開・改変時はライセンス条件を確認してください。</footer>
 <video id="video" muted playsinline preload="auto" style="display:none"></video>
 <script>
 'use strict';
@@ -234,10 +260,34 @@ function keyImage(data,w,h,idx=null,frameIndex=0){
 function removeSpeckles(d,w,h){const seen=new Uint8Array(w*h),stack=new Int32Array(w*h),minSize=Math.max(3,Math.floor(w*h*.0003));for(let i=0;i<w*h;i++){if(seen[i]||d[i*4+3]<56)continue;let len=0,q=0;seen[i]=1;stack[len++]=i;while(q<len){let p=stack[q++],x=p%w,y=(p/w)|0;const tryN=n=>{if(!seen[n]&&d[n*4+3]>=56){seen[n]=1;stack[len++]=n}};if(x>0)tryN(p-1);if(x<w-1)tryN(p+1);if(y>0)tryN(p-w);if(y<h-1)tryN(p+w)}if(len<minSize)for(let j=0;j<len;j++)d[stack[j]*4+3]=0}}
 function rectBounds(count,size,custom){return custom&&custom.length===count+1?custom:Array.from({length:count+1},(_,i)=>Math.round(i*size/count))}
 function axisCellAt(n,bounds){for(let i=0;i<bounds.length-1;i++)if(n<bounds[i+1])return i;return bounds.length-2}
-function cellRect(idx){const x=idx%S.cols,y=(idx/S.cols)|0,bx=rectBounds(S.cols,S.width,S.boundsX),by=rectBounds(S.rows,S.height,S.boundsY);return{x:bx[x],y:by[y],w:Math.max(1,bx[x+1]-bx[x]),h:Math.max(1,by[y+1]-by[y])}}
+function baseCellRect(idx){const x=idx%S.cols,y=(idx/S.cols)|0,bx=rectBounds(S.cols,S.width,S.boundsX),by=rectBounds(S.rows,S.height,S.boundsY);return{x:bx[x],y:by[y],w:Math.max(1,bx[x+1]-bx[x]),h:Math.max(1,by[y+1]-by[y])}}
+function clampCrop(r){const x=clamp(Math.round(Number(r.x)||0),0,Math.max(0,S.width-1)),y=clamp(Math.round(Number(r.y)||0),0,Math.max(0,S.height-1));return{x,y,w:clamp(Math.round(Number(r.w)||1),1,S.width-x),h:clamp(Math.round(Number(r.h)||1),1,S.height-y)}}
+function cellRect(idx){return S.cells[idx]?.rect?clampCrop(S.cells[idx].rect):baseCellRect(idx)}
+function subtractNeighborComponents(img,rect,base){
+ // Connected chroma-key foreground components are retained only when they reach
+ // the CENTER of the original grid cell. Independent neighboring subjects that
+ // become visible after widening the crop are removed, without cropping the selected body.
+ const w=img.width,h=img.height,d=img.data,n=w*h,visited=new Uint8Array(n),queue=new Int32Array(n),keep=new Uint8Array(n);
+ const bx0=base.x+base.w*.18,by0=base.y+base.h*.18,bx1=base.x+base.w*.82,by1=base.y+base.h*.82;
+ let anchored=0;
+ for(let at=0;at<n;at++){
+  if(visited[at]||d[at*4+3]<24)continue;
+  let head=0,tail=0,anchors=0;queue[tail++]=at;visited[at]=1;
+  while(head<tail){const p=queue[head++],xx=p%w,yy=(p/w)|0,gx=rect.x+xx,gy=rect.y+yy;
+   if(gx>=bx0&&gx<bx1&&gy>=by0&&gy<by1)anchors++;
+   const scan=(v)=>{if(!visited[v]&&d[v*4+3]>=24){visited[v]=1;queue[tail++]=v}};
+   if(xx)scan(p-1);if(xx<w-1)scan(p+1);if(yy)scan(p-w);if(yy<h-1)scan(p+w);
+  }
+  if(anchors>=Math.min(6,tail)){anchored++;for(let q=0;q<tail;q++)keep[queue[q]]=1}
+ }
+ // When no component is anchored, do not unexpectedly erase the whole sprite.
+ if(!anchored)return img;
+ for(let at=0;at<n;at++)if(!keep[at])d[at*4+3]=0;
+ return img;
+}
 
-function getCellImage(idx,fi){const f=S.frames[fi],r=cellRect(idx);const data=new Uint8ClampedArray(r.w*r.h*4);for(let y=0;y<r.h;y++){const i=((r.y+y)*S.width+r.x)*4;data.set(f.data.subarray(i,i+r.w*4),y*r.w*4)}return keyImage(data,r.w,r.h,idx,fi)}
-// 1× fits the preview panel. 2× and 3× magnify its display without changing canvas pixels or export settings.
+function getCellImage(idx,fi){const f=S.frames[fi],r=cellRect(idx);const data=new Uint8ClampedArray(r.w*r.h*4);for(let y=0;y<r.h;y++){const i=((r.y+y)*S.width+r.x)*4;data.set(f.data.subarray(i,i+r.w*4),y*r.w*4)}const img=keyImage(data,r.w,r.h,idx,fi);return S.cells[idx]?.subtractNeighbors&&$('keyEnable').checked?subtractNeighborComponents(img,r,baseCellRect(idx)):img}
+// 1× fits the preview panel. 2–4× scroll inside a fixed-height viewport; export resolution never changes.
 const previewZoom={source:1,sprite:1};
 function applyPreviewZoom(type,center=false){
  const view=$(type==='source'?'sourceViewport':'spriteViewport'),stage=$(type==='source'?'sourceStage':'spriteStage'),c=$(type==='source'?'sourceCanvas':'spriteCanvas');
@@ -247,7 +297,19 @@ function applyPreviewZoom(type,center=false){
  const fit=Math.min(vw/c.width,vh/c.height),zoom=previewZoom[type],w=Math.max(1,Math.round(c.width*fit*zoom)),h=Math.max(1,Math.round(c.height*fit*zoom));
  c.style.width=w+'px';c.style.height=h+'px';
  stage.style.width=Math.max(view.clientWidth,w+4)+'px';stage.style.height=Math.max(view.clientHeight,h+4)+'px';
- if(center){view.scrollLeft=Math.max(0,(view.scrollWidth-view.clientWidth)/2);view.scrollTop=Math.max(0,(view.scrollHeight-view.clientHeight)/2)}
+ if(center){
+  let fx=c.width/2,fy=c.height/2;
+  if(type==='source'&&S.frames.length){const r=cellRect(S.selected);fx=r.x+r.w/2;fy=r.y+r.h/2}
+  if(type==='sprite'&&S.frames.length){
+   const d=c.getContext('2d',{willReadFrequently:true}).getImageData(0,0,c.width,c.height).data;
+   let x0=c.width,y0=c.height,x1=-1,y1=-1;
+   for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(d[(y*c.width+x)*4+3]>80){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}
+   if(x1>=x0){fx=(x0+x1+1)/2;fy=(y0+y1+1)/2}
+  }
+  const offX=Math.max(0,(stage.clientWidth-w)/2),offY=Math.max(0,(stage.clientHeight-h)/2);
+  view.scrollLeft=Math.max(0,offX+fx*w/c.width-view.clientWidth/2);
+  view.scrollTop=Math.max(0,offY+fy*h/c.height-view.clientHeight/2);
+ }
 }
 for(const b of document.querySelectorAll('[data-preview-zoom]'))b.addEventListener('click',()=>{
  const type=b.dataset.previewZoom,zoom=Number(b.dataset.zoom);previewZoom[type]=zoom;
@@ -255,16 +317,44 @@ for(const b of document.querySelectorAll('[data-preview-zoom]'))b.addEventListen
  applyPreviewZoom(type,true);
 });
 window.addEventListener('resize',()=>{applyPreviewZoom('source');applyPreviewZoom('sprite')});
-function drawSource(){if(!S.frames.length)return;const f=S.frames[S.frame],c=$('sourceCanvas');c.width=S.width;c.height=S.height;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.putImageData(new ImageData(f.data,S.width,S.height),0,0);ctx.lineWidth=Math.max(1,Math.round(S.width/550));const boundsX=rectBounds(S.cols,S.width,S.boundsX),boundsY=rectBounds(S.rows,S.height,S.boundsY);for(let x=1;x<S.cols;x++){const px=boundsX[x];ctx.strokeStyle='#ff6363';ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,S.height);ctx.stroke()}for(let y=1;y<S.rows;y++){const py=boundsY[y];ctx.strokeStyle='#ff6363';ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(S.width,py);ctx.stroke()}ctx.setLineDash([]);const r=cellRect(S.selected);ctx.strokeStyle='#63f7be';ctx.lineWidth=Math.max(2,S.width/210);ctx.strokeRect(r.x+1,r.y+1,r.w-2,r.h-2);ctx.fillStyle='#63f7be';ctx.font=`bold ${Math.max(13,S.width/45)}px sans-serif`;ctx.fillText('CELL '+(S.selected+1),r.x+8,r.y+Math.max(22,S.width/32));$('frameSlider').value=S.frame;$('frameCount').textContent=`${S.frame+1}/${S.frames.length}  ·  ${f.time.toFixed(2)}s`;}
+if(typeof ResizeObserver!=='undefined'){const ro=new ResizeObserver(()=>{applyPreviewZoom('source');applyPreviewZoom('sprite')});ro.observe($('sourceViewport'));ro.observe($('spriteViewport'))}
+function drawSource(){if(!S.frames.length)return;const f=S.frames[S.frame],c=$('sourceCanvas');c.width=S.width;c.height=S.height;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.putImageData(new ImageData(f.data,S.width,S.height),0,0);ctx.lineWidth=Math.max(1,Math.round(S.width/550));const boundsX=rectBounds(S.cols,S.width,S.boundsX),boundsY=rectBounds(S.rows,S.height,S.boundsY);for(let x=1;x<S.cols;x++){const px=boundsX[x];ctx.strokeStyle='#ff6363';ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,S.height);ctx.stroke()}for(let y=1;y<S.rows;y++){const py=boundsY[y];ctx.strokeStyle='#ff6363';ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(S.width,py);ctx.stroke()}ctx.setLineDash([]);
+ // Edited regions are independent and may overlap other grid cells.
+ for(let i=0;i<S.cells.length;i++){if(i===S.selected||!S.cells[i].rect)continue;const r=cellRect(i);ctx.strokeStyle='#f5b46e';ctx.lineWidth=Math.max(1,S.width/460);ctx.strokeRect(r.x+.5,r.y+.5,r.w-1,r.h-1)}
+ const r=cellRect(S.selected);ctx.strokeStyle='#63f7be';ctx.lineWidth=Math.max(2,S.width/210);ctx.strokeRect(r.x+1,r.y+1,Math.max(1,r.w-2),Math.max(1,r.h-2));ctx.fillStyle='#63f7be';ctx.font=`bold ${Math.max(13,S.width/45)}px sans-serif`;ctx.fillText('CELL '+(S.selected+1),r.x+8,r.y+Math.max(22,S.width/32));$('frameSlider').value=S.frame;$('frameCount').textContent=`${S.frame+1}/${S.frames.length}  ·  ${f.time.toFixed(2)}s`;}
 function drawSprite(){const c=$('spriteCanvas'),ctx=c.getContext('2d');if(!S.frames.length){ctx.clearRect(0,0,c.width,c.height);return}const img=getCellImage(S.selected,S.frame);c.width=img.width;c.height=img.height;ctx.putImageData(img,0,0);$('cellSub').textContent=`${S.selected+1}/${S.cells.length}  ·  ${img.width}×${img.height}`;applyPreviewZoom('sprite')}
 function redraw(){drawSource();drawSprite();applyPreviewZoom('source');applyPreviewZoom('sprite')}
 function readGrid(){S.cols=clamp(+$('cols').value||1,1,10);S.rows=clamp(+$('rows').value||1,1,10);$('cols').value=S.cols;$('rows').value=S.rows}
 function gridChanged(){if(!S.frames.length)return;readGrid();S.boundsX=null;S.boundsY=null;initCells();autoBG(false);redraw();renderCells();renderEditor();$('gridQuality').textContent='手動設定（等間隔）。「グリッド自動推定」で境界の補正もできます。';status(`グリッド ${S.cols}列 × ${S.rows}行に設定しました。`)}
-function initCells(){const old=S.cells;S.cells=Array.from({length:S.cols*S.rows},(_,i)=>({name:old[i]?.name||`character_${String(i+1).padStart(2,'0')}`,enabled:old[i]?.enabled??true,segments:old[i]?.segments?.length?old[i].segments.map(x=>({...x})): [{name:'idle',start:0,end:S.duration||1}]}));S.selected=clamp(S.selected,0,S.cells.length-1);S.aiMasks.clear();updateStats();}
+function initCells(){const old=S.cells;S.cells=Array.from({length:S.cols*S.rows},(_,i)=>({name:old[i]?.name||`character_${String(i+1).padStart(2,'0')}`,enabled:old[i]?.enabled??true,segments:old[i]?.segments?.length?old[i].segments.map(x=>({...x})): [{name:'idle',start:0,end:S.duration||1}],rect:null,subtractNeighbors:old[i]?.subtractNeighbors??false}));S.selected=clamp(S.selected,0,S.cells.length-1);S.aiMasks.clear();updateStats();}
 function updateStats(){const loaded=S.frames.length>0;for(const id of ['gridAuto','eyedropper','detectBg','aiBtn','playBtn','prevFrame','nextFrame','frameSlider','allCells','noCells','pngBtn','gifBtn','selectedZip','allZip','charName','useCell','copyActions','addSegment'])$(id).disabled=!loaded;$('selectedCount').textContent=`${S.cells.filter(x=>x.enabled).length} / ${S.cells.length} cells`;$('sourceSub').textContent=loaded?`${S.width}×${S.height}  ·  ${S.frames.length} frames`:'NO INPUT';$('cellLabel').textContent=loaded?`CELL ${String(S.selected+1).padStart(2,'0')}`:'未選択';$('frameSlider').max=Math.max(0,S.frames.length-1)}
 function renderCells(){const dest=$('cells');dest.innerHTML='';if(!S.frames.length)return;for(let i=0;i<S.cells.length;i++){const cell=S.cells[i];const b=document.createElement('button');b.type='button';b.className='cellcard'+(i===S.selected?' selected':'')+(cell.enabled?'':' disabled-cell');const ck=document.createElement('input');ck.type='checkbox';ck.className='cellcheck';ck.checked=cell.enabled;ck.title='書き出し対象';ck.addEventListener('click',e=>e.stopPropagation());ck.addEventListener('change',()=>{cell.enabled=ck.checked;updateStats();renderCells()});const c=canvas(80,80);const image=getCellImage(i,0),ic=canvas(image.width,image.height);ic.getContext('2d').putImageData(image,0,0);const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=false;const scale=Math.min(78/image.width,78/image.height);ctx.drawImage(ic,(80-image.width*scale)/2,(80-image.height*scale)/2,image.width*scale,image.height*scale);const name=document.createElement('strong');name.textContent=cell.name;const small=document.createElement('small');small.textContent=`CELL ${String(i+1).padStart(2,'0')} · ${cell.segments.length} action(s)`;b.append(ck,c,name,small);b.addEventListener('click',()=>selectCell(i));dest.append(b)}updateStats()}
-function selectCell(i){S.selected=i;renderCells();renderEditor();redraw()}
-function renderEditor(){if(!S.frames.length)return;const c=S.cells[S.selected];$('charName').value=c.name;$('useCell').checked=c.enabled;drawTimeline();renderSegments();updateStats()}
+function selectCell(i){S.selected=i;renderCells();renderEditor();redraw();applyPreviewZoom('source',true);applyPreviewZoom('sprite',true)}
+function renderCropEditor(){
+ if(!S.frames.length)return;const r=cellRect(S.selected),base=baseCellRect(S.selected),cell=S.cells[S.selected];
+ const values={cropX:r.x,cropY:r.y,cropW:r.w,cropH:r.h};for(const [id,v] of Object.entries(values)){$(id).value=v;$(id).disabled=false}
+ $('cropX').max=Math.max(0,S.width-1);$('cropY').max=Math.max(0,S.height-1);
+ $('cropW').max=S.width-r.x;$('cropH').max=S.height-r.y;
+ $('subtractNeighbor').disabled=false;$('subtractNeighbor').checked=!!cell.subtractNeighbors;
+ $('cropReset').disabled=false;$('cropFit').disabled=false;
+ document.querySelectorAll('[data-crop-nudge]').forEach(b=>b.disabled=false);
+ $('cropHint').textContent=`基本範囲: X${base.x} / Y${base.y} / ${base.w}×${base.h}px。現在: X${r.x} / Y${r.y} / ${r.w}×${r.h}px。セルを重ねても他セルの設定は変わりません。隣キャラ除外には背景透過が必要です。`;
+}
+function setCellCrop(change){
+ if(!S.frames.length)return;const cell=S.cells[S.selected],r=cellRect(S.selected);
+ const next=clampCrop({...r,...change});cell.rect=next;
+ S.aiMasks.delete(S.selected);renderCropEditor();redraw();renderCells();applyPreviewZoom('source',true);applyPreviewZoom('sprite',true);
+}
+for(const [id,field] of [['cropX','x'],['cropY','y'],['cropW','w'],['cropH','h']])$(id).addEventListener('change',e=>{
+ if(!S.frames.length)return;const n=Number(e.target.value);if(!Number.isFinite(n)){renderCropEditor();return}setCellCrop({[field]:Math.round(n)});
+});
+for(const b of document.querySelectorAll('[data-crop-nudge]'))b.addEventListener('click',()=>{
+ const [field,by]=b.dataset.cropNudge.split(',');setCellCrop({[field]:cellRect(S.selected)[field]+Number(by)});
+});
+$('cropReset').addEventListener('click',()=>{if(!S.frames.length)return;S.cells[S.selected].rect=null;S.aiMasks.delete(S.selected);renderCropEditor();redraw();renderCells();applyPreviewZoom('source',true);applyPreviewZoom('sprite',true);status('選択CELLの位置・サイズを基本グリッドに戻しました。')});
+$('cropFit').addEventListener('click',()=>{if(!S.frames.length)return;const r=cellRect(S.selected),extra=Math.round(r.w*.5),x=Math.max(0,r.x-Math.floor(extra/2));setCellCrop({x,w:Math.min(S.width-x,r.w+extra)});status('選択CELLの横幅を1.5倍に拡張しました。')});
+$('subtractNeighbor').addEventListener('change',e=>{if(!S.frames.length)return;S.cells[S.selected].subtractNeighbors=e.target.checked;drawSprite();renderCells();status(e.target.checked?'隣のキャラを連結成分で除外します。接触したキャラは除去できない場合があります。':'隣キャラ除外をOFFにしました。')});
+function renderEditor(){if(!S.frames.length)return;const c=S.cells[S.selected];$('charName').value=c.name;$('useCell').checked=c.enabled;renderCropEditor();drawTimeline();renderSegments();updateStats()}
 function drawTimeline(){const dest=$('timeline');dest.innerHTML='';if(!S.cells.length)return;const dur=Math.max(.001,S.duration);for(const x of S.cells[S.selected].segments){const d=document.createElement('div');d.className='timetrack';d.style.left=(clamp(x.start/dur,0,1)*100)+'%';d.style.width=(Math.max(.5,(clamp(x.end,0,dur)-clamp(x.start,0,dur))/dur*100))+'%';d.style.background=['#5bdcaa55','#9284fa55','#fdba7355','#ff668855'][S.cells[S.selected].segments.indexOf(x)%4];d.textContent=x.name;dest.append(d)}}
 function renderSegments(){const d=$('segments');d.innerHTML='';S.cells[S.selected].segments.forEach((seg,i)=>{const wrap=document.createElement('div');wrap.className='segment';const top=document.createElement('div');top.className='top';const name=document.createElement('input');name.className='input';name.value=seg.name;name.placeholder='idle / attack / run';name.setAttribute('aria-label','アクション名');name.addEventListener('input',()=>{seg.name=name.value;drawTimeline()});top.append(name);const btns=document.createElement('div');btns.className='buttons';for(const field of ['start','end']){const div=document.createElement('div');div.className='field';const lab=document.createElement('label');lab.textContent=field==='start'?'開始 秒':'終了 秒';const inp=document.createElement('input');inp.className='input';inp.type='number';inp.min='0';inp.max=S.duration;inp.step='.05';inp.value=+seg[field].toFixed(2);inp.addEventListener('change',()=>{seg[field]=clamp(+inp.value||0,0,S.duration);if(seg.end<seg.start){seg.end=seg.start;renderSegments()}drawTimeline()});div.append(lab,inp);btns.append(div)}const del=document.createElement('button');del.className='btn small danger';del.title='アクション削除';del.textContent='×';del.addEventListener('click',()=>{if(S.cells[S.selected].segments.length<=1){status('最低1つのアクション区間が必要です。');return}S.cells[S.selected].segments.splice(i,1);renderSegments();drawTimeline();renderCells()});btns.append(del);wrap.append(top,btns);d.append(wrap)})}
 function frameSet(index){if(!S.frames.length)return;S.frame=(index+S.frames.length)%S.frames.length;redraw()}
@@ -327,7 +417,7 @@ function getCellImageRaw(idx,fi){const f=S.frames[fi],r=cellRect(idx),d=new Uint
 function segmentIndices(seg){let indices=[];for(let i=0;i<S.frames.length;i++){const t=S.frames[i].time;if(t>=seg.start-.0001&&t<seg.end+.0001)indices.push(i)}if(!indices.length){let near=0,d=Infinity;for(let i=0;i<S.frames.length;i++){const dd=Math.abs(S.frames[i].time-seg.start);if(dd<d){d=dd;near=i}}indices=[near]}return indices}
 function trimBox(images,padding){const w=images[0].width,h=images[0].height;let minX=w,minY=h,maxX=-1,maxY=-1;for(const img of images){const d=img.data;for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>=45){if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y}}if(maxX<0)return{x:0,y:0,w:w,h:h};return{x:Math.max(0,minX-padding),y:Math.max(0,minY-padding),w:Math.min(w-1,maxX+padding)-Math.max(0,minX-padding)+1,h:Math.min(h-1,maxY+padding)-Math.max(0,minY-padding)+1}}
 function normalizeImages(images,opts){const b=trimBox(images,opts.padding),out=[];for(const img of images){const ic=canvas(img.width,img.height);ic.getContext('2d').putImageData(img,0,0);const dc=canvas(b.w*opts.scale,b.h*opts.scale),ctx=dc.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(ic,b.x,b.y,b.w,b.h,0,0,dc.width,dc.height);out.push(dc)}return out}
-function buildSheet(canvases,name,opts){const n=canvases.length,w=canvases[0].width,h=canvases[0].height,columns=Math.max(1,Math.min(n,opts.perRow,Math.floor(16000/w)||1)),rows=Math.ceil(n/columns);if(columns*w>16384||rows*h>16384)throw Error('シートが大きすぎます。抽出コマ数や拡大率を減らしてください');const c=canvas(w*columns,h*rows),ctx=c.getContext('2d');const frames={};for(let i=0;i<n;i++){const x=i%columns*w,y=Math.floor(i/columns)*h;ctx.drawImage(canvases[i],x,y);frames[`${name}_${pad3(i)}.png`]={frame:{x,y,w,h},rotated:false,trimmed:false,spriteSourceSize:{x:0,y:0,w,h},sourceSize:{w,h},duration:Math.round(1000/actualFPS())}}const json={frames,meta:{app:'FrameCut Studio',version:'1.0',image:`${name}.png`,format:'RGBA8888',size:{w:c.width,h:c.height},scale:'1',frameTags:[{name:name.split('_').pop(),from:0,to:n-1,direction:'forward'}]}};return{canvas:c,json}}
+function buildSheet(canvases,name,opts){const n=canvases.length,w=canvases[0].width,h=canvases[0].height,columns=Math.max(1,Math.min(n,opts.perRow,Math.floor(16000/w)||1)),rows=Math.ceil(n/columns);if(columns*w>16384||rows*h>16384)throw Error('シートが大きすぎます。抽出コマ数や拡大率を減らしてください');const c=canvas(w*columns,h*rows),ctx=c.getContext('2d');const frames={};for(let i=0;i<n;i++){const x=i%columns*w,y=Math.floor(i/columns)*h;ctx.drawImage(canvases[i],x,y);frames[`${name}_${pad3(i)}.png`]={frame:{x,y,w,h},rotated:false,trimmed:false,spriteSourceSize:{x:0,y:0,w,h},sourceSize:{w,h},duration:Math.round(1000/actualFPS())}}const json={frames,meta:{app:'FrameCut Studio',version:'1.5.0',image:`${name}.png`,format:'RGBA8888',size:{w:c.width,h:c.height},scale:'1',frameTags:[{name:name.split('_').pop(),from:0,to:n-1,direction:'forward'}]}};return{canvas:c,json}}
 async function buildResources(idx,seg){const opts=outputOpts(),selected=segmentIndices(seg),images=selected.map(fi=>getCellImage(idx,fi)),imgs=normalizeImages(images,opts),name=nameSafe(S.cells[idx].name)+'_'+nameSafe(seg.name),sheet=buildSheet(imgs,name,opts);return{name,sheet,imgs,indices:selected}}
 // GIF89a encoder: 3-3-2 RGB global palette, transparency, NETSCAPE looping, LZW blocks.
 class Bytes{constructor(){this.a=[]}byte(...v){for(const x of v)this.a.push(x&255);return this}u16(v){return this.byte(v,v>>8)}u32(v){return this.byte(v,v>>8,v>>16,v>>24)}str(s){for(let i=0;i<s.length;i++)this.a.push(s.charCodeAt(i)&255);return this}append(bytes){for(let i=0;i<bytes.length;i++)this.a.push(bytes[i]);return this}done(){return Uint8Array.from(this.a)}}
